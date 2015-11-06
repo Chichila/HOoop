@@ -6,23 +6,46 @@ class ATMMachine(object):
     This class is an ATM simulator
     """
     def __init__(self):
-        self.accounts = []
+        self.accounts = [] #Inicializo la lista como vacia.
 
     def make_a_withdraw(self, account_number, amount):
         """Withdraw (amount) from (account_number)"""
-        pass
+        my_acc = None
+        for x in self.accounts:
+            if account_number == x.account_number:
+                my_acc=x
+        if my_acc == None:
+            print ('No existe la cuenta')
+        my_acc.withdraw(amount)
 
     def make_a_deposit(self, account_number, amount):
         """Deposit (amount) into (account_number)"""
-        pass
+        my_acc = None
+        for x in self.accounts:
+            if account_number == x.account_number:
+                my_acc=x
+        if my_acc == None:
+            print('No existe la cuenta')
+        my_acc.deposit(amount)
 
     def print_account_balance(self, account_number):
         """Print the Account Balance from (account_number)"""
-        pass
+        my_acc = None
+        for x in self.accounts:
+            if account_number == x.account_number:
+                my_acc=x
+        print('El balance de la cuenta',my_acc.account_number,' es ',my_acc.check_balance())
     
     def make_a_transfer(self, from_account_number, to_account_number, amount):
         """Transfer (amount) from (from_account_number) to (to_account_number)"""
-        pass
+        my_acc = None
+        other_acc = None
+        for x in self.accounts:
+            if from_account_number == x.account_number:
+                my_acc = x
+            if to_account_number == x.account_number:
+                other_acc = x
+        my_acc.transfer_money(amount,other_acc)
 
     def create_new_account(self, account_number, clients_name, initial_balance):
         """Create a new account that belongs to (clients_name) and has the (initial_balance)"""
@@ -32,18 +55,21 @@ class ATMMachine(object):
 
 class Account(object):
     """This class represents a simple Account"""
-    def __init__(self, account_number, clients_name, initial_balance = 0.0):
+    def __init__(self, account_number, clients_name, initial_balance):
         self.account_number = account_number
         self.clients_name = clients_name
         self.balance = initial_balance
 
     def withdraw(self, amount):
         """Withdraw some money!"""
-        pass
+        if self.balance >= amount:
+            self.balance -= amount
+        else:
+            print('No hay plata suficiente')
 
     def deposit(self, amount):
         """Let's receive some money!"""
-        pass
+        self.balance += amount
     
     def check_balance(self):
         """Let's see how rich we are!"""
@@ -51,7 +77,11 @@ class Account(object):
 
     def transfer_money(self, amount, another_account):
         """Transfer money from this account to the other one"""
-        pass
+        if self.balance >= amount:
+            self.balance -= amount
+            another_account.balance += amount
+        else:
+            print('No hay plata suficiente')
 
 
 def main():
